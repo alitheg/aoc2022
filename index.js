@@ -2,6 +2,8 @@ const winston = require('winston');
 const { format, transports } = require('winston');
 const { combine } = format;
 const { download } = require('./downloader')
+const commandLineArgs = require('command-line-args')
+const commandLineUsage = require('command-line-usage');
 
 winston.configure({
   format: combine(
@@ -11,13 +13,26 @@ winston.configure({
 });
 
 const optionDefinitions = [
-  { name: 'day', alias: 'd', type: Number },
-  // { name: 'input', alias: 'i', type: String }
+  { name: 'day', alias: 'd', type: Number, description: "Which day's task to run" },
+  { name: 'help', alias: 'h', type: Boolean, description: "Display this message" }
 ]
-
-const commandLineArgs = require('command-line-args')
+const sections = [
+  {
+    header: 'Advent of Code 2022',
+    content: 'Solutions to tasks in Node.JS'
+  },
+  {
+    header: 'Options',
+    optionList: optionDefinitions
+  }
+]
+const usage = commandLineUsage(sections)
 const options = commandLineArgs(optionDefinitions)
 
+if(options.help) {
+  console.error(usage);
+  process.exit(0)
+}
 let error = false;
 if(!options.day) {
   winston.error("Specify which day to run with -d")

@@ -1,0 +1,19 @@
+{
+  "name": "aoc-22",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "16"
+  },
+  "dependencies": {
+    "command-line-args": "^5.2.1",
+    "node-fetch": "^2.6.7",
+    "winston": "^3.8.2"
+  }
+}

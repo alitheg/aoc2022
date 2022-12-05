@@ -13,11 +13,7 @@ const calculateRanges = (pairingDef) => {
   return [calculateRange(elf1), calculateRange(elf2)]
 }
 const checkIfAllOverlap = (elf1, elf2) => {
-  elf1 = elf1.map(i => Number(i))
-  elf2 = elf2.map(i => Number(i))
-  if(elf1.every(i => elf2.includes(i))) return true;
-  if(elf2.every(i => elf1.includes(i))) return true;
-  return false;
+  return elf1.every(i => elf2.includes(i)) || elf2.every(i => elf1.includes(i));
 }
 
 module.exports = (input) => {
@@ -28,14 +24,6 @@ module.exports = (input) => {
     // debug(entry)
     if(checkIfAllOverlap(elf1, elf2)) {
       return memo + 1;
-    }  else {
-      debug("DEBUG")
-      debug(entry)
-      // debug(elf1)
-      // for(var i = 0; i < elf2.length; i++) {
-      //   debug(`Looking for ${elf2[i]}, ${typeof(elf2[i])}`)
-      //   debug(`indexOf ${elf1.indexOf(elf2[i])}`)
-      // }
     }
     return memo;
   }, 0)

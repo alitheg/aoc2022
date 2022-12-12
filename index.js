@@ -1,5 +1,6 @@
 const winston = require('winston');
 const { format, transports } = require('winston');
+const {promises: {readFile}} = require("fs");
 const { combine } = format;
 const { download } = require('./downloader')
 const commandLineArgs = require('command-line-args')
@@ -14,6 +15,7 @@ winston.configure({
 
 const optionDefinitions = [
   { name: 'day', alias: 'd', type: Number, description: "Which day's task to run" },
+  { name: 'file', alias: 'f', type: String, description: "Override file"},
   { name: 'help', alias: 'h', type: Boolean, description: "Display this message" }
 ]
 const sections = [
@@ -45,10 +47,20 @@ if(error) {
 async function main() {
   let task = require(`./day${options.day}`);
   winston.info(`Downloading input task for day ${options.day}`);
-  download(options.day).then(input => {
+  let fileLoad;
+  if(options.file) {
+    fileLoad = readFile(options.file).then(data => {
+      return data.toString();
+    });
+  } else {
+    fileLoad = download(options.day);
+  }
+  fileLoad.then(input => {
     winston.info(`Starting task for day ${options.day}`);
     task(input)
     winston.info(`Finished`);
+  }).catch(e => {
+    winston.error(e);
   });
   
 }

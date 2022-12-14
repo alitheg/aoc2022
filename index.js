@@ -8,7 +8,15 @@ const commandLineUsage = require('command-line-usage');
 
 winston.configure({
   format: combine(
-    format.cli({ colors: { info: 'blue', error: 'red' }})
+    format.errors({ stack: true }),
+    format.cli({ colors: { info: 'blue', error: 'red' }}),
+    format.printf(({ level, message, timestamp, stack }) => {
+        if (stack) {
+            // print log trace 
+            return `${level}: ${message} - ${stack}`;
+        }
+        return `${level}: ${message}`;
+    })
   ),
   transports: [new transports.Console()]
 });
